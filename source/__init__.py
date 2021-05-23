@@ -1,6 +1,7 @@
 # coding: utf-8
 
-import os, glob
+import os
+import glob
 
 __all__ = [
     os.path.split(os.path.splitext(file)[0])[1]

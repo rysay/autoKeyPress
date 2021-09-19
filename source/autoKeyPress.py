@@ -1,70 +1,51 @@
 # coding: utf-8
 import pyautogui
 import time
-import subprocess
-import win32gui
-import win32con
-import array
+import decimal
 
 
 def main():
     """メイン処理
     """
     pyautogui.FAILSAFE = False
-    targetWindowName = 'Bluestacks'
+    text = """\\t   \\n   \\r
+!   ”   #   $   %   &   '   (   )   =   ~   |
+`   +   *   {   }   <   >   ?   _   yen
+1   2   3   4   5   6   7   8   9   0   -   ^
+q   w   e   r   t   y   u   i   o   p   @   [
+a   s   d   f   g   h   j   k   l   ;   :   ]
+z   x   c   v   b   n   m   ,   .   /   \\
+f1  f2  f3  f4  f5  f6  f7  f8  f9  f10 f11 f12
+num0   num1   num2   num3   num4
+num5   num6   num7   num8   num9
+numlock   insert   delete   home   end   pgup   pgdn
+prtscr   scrolllock   pause   up   down   left   right
+backspace   enter   return   capslock   nonconvert   convert
+space   kana   kanji   apps   win   command   option
+alt   tab   ctrl   shift   esc   fn
+"""
+    try:
+        print(text)
+        val = input('Choose targer key : ')
+        spdval = input('Enter type interval : ')
+        spd = decimal.Decimal(spdval)
+        print('Your insert key is ... ' + val)
+    except decimal.InvalidOperation:
+        print('Prease enter numbers')
+        main()
 
-    i = 0
-    time.sleep(1)
-    while i < 1000:
-        for _ in range(5):
-            #print(str(i) + ':1times')
-            executeTargetWindow(targetWindowName)
-            time.sleep(10)
-        time.sleep(100)
-        i += 1
+    num_of_secs = 5
+    while num_of_secs:
+        print(num_of_secs)
+        time.sleep(1)
+        num_of_secs -= 1
 
+    print('start')
 
-def executeTargetWindow(targetWindowName):
-    """対象のアプリケーションウィンドウを一時アクティブにしてメソッドを実行。
-    Parameters
-    ----------
-    targetWindowName : String
-        ウィンドウハンドルのタイトル
-    """
-    activeWindowTitle = win32gui.GetWindowText(win32gui.GetForegroundWindow())
-    activeWindowClass = win32gui.GetClassName(win32gui.GetForegroundWindow())
-
-    targetWindow = win32gui.FindWindow(None, targetWindowName)
-    if targetWindow == 0:
-        cmd = 'start C:\\Program Files\\BlueStacks_bgp64_hyperv\\Bluestacks.exe'
-        subprocess.Popen(cmd, shell=True)
-        return
-
-    windowActive(targetWindow)
-    win32gui.SetForegroundWindow(win32gui.FindWindow(activeWindowClass, activeWindowTitle))
-
-
-def windowActive(handle):
-    """指定したウィンドウをアクティブにする(ウィンドウ左上クリック)
-    """
-    # 例外が出るwin32gui.SetForegroundWindow(habdle)の代わり
-    # win32con.HWND_TOPMOST:-1(最前列)
-    # win32con.HWND_NOTOPMOST:-2(最前列の解除)
-    # SWP_SHOWWINDOW:0x40
-    # win32con.SWP_NOMOVE:0x2
-    # win32con.SWP_NOSIZE:0x1
-    win32gui.SetWindowPos(handle, win32con.HWND_NOTOPMOST, 0, 0, 0, 0, win32con.SWP_NOSIZE | win32con.SWP_NOMOVE | win32con.SWP_SHOWWINDOW)
-
-
-
-    # マウスクリックでウィンドウアクティブ
-    win_x1, win_y1, win_x2, win_y2 = win32gui.GetWindowRect(handle)
-    mousePos = pyautogui.position()
-    pyautogui.leftClick(win_x1, win_y1)
-    pyautogui.moveTo(mousePos)
-
-    pyautogui.press('enter')
-
+    while True:
+        pyautogui.keyDown(val)
+        pyautogui.keyUp(val)
+        time.sleep(spd)
 
 if __name__ == "__main__":
     main()

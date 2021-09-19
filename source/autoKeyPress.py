@@ -8,7 +8,7 @@ import array
 
 
 def main():
-    """メイン処理
+    """メイン処理2
     """
     pyautogui.FAILSAFE = False
     targetWindowName = 'Bluestacks'
